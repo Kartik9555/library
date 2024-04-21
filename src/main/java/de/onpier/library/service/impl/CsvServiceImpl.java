@@ -9,8 +9,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class CsvServiceImpl implements CsvService {
 
@@ -23,6 +25,7 @@ public class CsvServiceImpl implements CsvService {
                 .parse();
         }
         catch (FileNotFoundException e) {
+            log.error("Error occurred while reading user csv file", e);
             throw new RuntimeException(e);
         }
     }
@@ -37,6 +40,7 @@ public class CsvServiceImpl implements CsvService {
                 .parse();
         }
         catch (FileNotFoundException e) {
+            log.error("Error occurred while reading borrowed csv file", e);
             throw new RuntimeException(e);
         }
     }
@@ -51,6 +55,7 @@ public class CsvServiceImpl implements CsvService {
                 .parse();
         }
         catch (FileNotFoundException e) {
+            log.error("Error occurred while reading book csv file", e);
             throw new RuntimeException(e);
         }
     }

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/book")
 @RequiredArgsConstructor
+@Tag(name = "BookService")
 public class BookController {
 
     private final BookService bookService;
@@ -27,16 +29,23 @@ public class BookController {
 
     @Operation(description = "Returns all books borrowed by a given user in a given date range")
     @ApiResponses(
-        value = @ApiResponse(
-            responseCode = "200",
-            description = "Found the books",
-            content = {
-                @Content(
-                    mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = BookDto.class))
-                )
-            }
-        )
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Found the books",
+                content = {
+                    @Content(
+                        mediaType = "application/json",
+                        array = @ArraySchema(schema = @Schema(implementation = BookDto.class))
+                    )
+                }
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                description = "Invalid input parameters",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+            )
+        }
     )
     @GetMapping("/books-borrowed")
     public ResponseEntity<List<BookDto>> getBooksBorrowedByUserBetween(

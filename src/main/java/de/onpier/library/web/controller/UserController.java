@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
+@Tag(name = "UserService")
 public class UserController {
     private final UserService userService;
 
@@ -61,16 +63,23 @@ public class UserController {
 
     @Operation(description = "Returns all users who have borrowed a book on a given date")
     @ApiResponses(
-        value = @ApiResponse(
-            responseCode = "200",
-            description = "Found the users",
-            content = {
-                @Content(
-                    mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = UserDto.class))
-                )
-            }
-        )
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Found the users",
+                content = {
+                    @Content(
+                        mediaType = "application/json",
+                        array = @ArraySchema(schema = @Schema(implementation = UserDto.class))
+                    )
+                }
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                description = "Invalid input parameters",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+            )
+        }
     )
     @GetMapping("/borrowers-by-date")
     public ResponseEntity<List<UserDto>> getAllUsersBorrowedBookOnGivenDate(
